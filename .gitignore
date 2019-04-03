@@ -1,9 +1,9 @@
 #Don't track contents of these folders
-#.svn/
-#bin/
-#build/
-#scripts/
-#lib/
+.svn/
+bin/
+build/
+scripts/
+lib/
 
 #Ignore logs#
 ###################
