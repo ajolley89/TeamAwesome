@@ -71,6 +71,7 @@ CMAKE_BINARY_DIR = /Users/ajolley/moos-ivp-team-awesome/build
 src/all: src/lib_behaviors-test/all
 src/all: src/pXRelayTest/all
 src/all: src/pExampleApp/all
+src/all: src/uFldHazardMgrX/all
 
 .PHONY : src/all
 
@@ -78,6 +79,7 @@ src/all: src/pExampleApp/all
 src/clean: src/lib_behaviors-test/clean
 src/clean: src/pXRelayTest/clean
 src/clean: src/pExampleApp/clean
+src/clean: src/uFldHazardMgrX/clean
 
 .PHONY : src/clean
 
@@ -85,6 +87,7 @@ src/clean: src/pExampleApp/clean
 src/preinstall: src/lib_behaviors-test/preinstall
 src/preinstall: src/pXRelayTest/preinstall
 src/preinstall: src/pExampleApp/preinstall
+src/preinstall: src/uFldHazardMgrX/preinstall
 
 .PHONY : src/preinstall
 
@@ -250,6 +253,61 @@ src/pExampleApp/CMakeFiles/pExampleApp.dir/clean:
 
 # clean rule for target.
 clean: src/pExampleApp/CMakeFiles/pExampleApp.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory src/uFldHazardMgrX
+
+# Convenience name for "all" pass in the directory.
+src/uFldHazardMgrX/all: src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/all
+
+.PHONY : src/uFldHazardMgrX/all
+
+# Convenience name for "clean" pass in the directory.
+src/uFldHazardMgrX/clean: src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/clean
+
+.PHONY : src/uFldHazardMgrX/clean
+
+# Convenience name for "preinstall" pass in the directory.
+src/uFldHazardMgrX/preinstall:
+
+.PHONY : src/uFldHazardMgrX/preinstall
+
+#=============================================================================
+# Target rules for target src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir
+
+# All Build rule for target.
+src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/all:
+	$(MAKE) -f src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/build.make src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/depend
+	$(MAKE) -f src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/build.make src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/ajolley/moos-ivp-team-awesome/build/CMakeFiles --progress-num=10,11,12,13 "Built target uFldHazardMgrX"
+.PHONY : src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/all
+
+# Include target in all.
+all: src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ajolley/moos-ivp-team-awesome/build/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ajolley/moos-ivp-team-awesome/build/CMakeFiles 0
+.PHONY : src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/rule
+
+# Convenience name for target.
+uFldHazardMgrX: src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/rule
+
+.PHONY : uFldHazardMgrX
+
+# clean rule for target.
+src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/clean:
+	$(MAKE) -f src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/build.make src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/clean
+.PHONY : src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/clean
+
+# clean rule for target.
+clean: src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/clean
 
 .PHONY : clean
 

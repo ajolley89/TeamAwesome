@@ -37,6 +37,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/Users/ajolley/moos-ivp-team-awesome/build/src/lib_behaviors-test/cmake_install.cmake")
   include("/Users/ajolley/moos-ivp-team-awesome/build/src/pXRelayTest/cmake_install.cmake")
   include("/Users/ajolley/moos-ivp-team-awesome/build/src/pExampleApp/cmake_install.cmake")
+  include("/Users/ajolley/moos-ivp-team-awesome/build/src/uFldHazardMgrX/cmake_install.cmake")
 
 endif()
 

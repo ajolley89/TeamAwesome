@@ -11,3 +11,6 @@
 /Users/ajolley/moos-ivp-team-awesome/build/src/pExampleApp/CMakeFiles/rebuild_cache.dir
 /Users/ajolley/moos-ivp-team-awesome/build/src/pExampleApp/CMakeFiles/edit_cache.dir
 /Users/ajolley/moos-ivp-team-awesome/build/src/pExampleApp/CMakeFiles/pExampleApp.dir
+/Users/ajolley/moos-ivp-team-awesome/build/src/uFldHazardMgrX/CMakeFiles/rebuild_cache.dir
+/Users/ajolley/moos-ivp-team-awesome/build/src/uFldHazardMgrX/CMakeFiles/edit_cache.dir
+/Users/ajolley/moos-ivp-team-awesome/build/src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir

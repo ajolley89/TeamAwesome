@@ -15,6 +15,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../src/lib_behaviors-test/CMakeLists.txt"
   "../src/pExampleApp/CMakeLists.txt"
   "../src/pXRelayTest/CMakeLists.txt"
+  "../src/uFldHazardMgrX/CMakeLists.txt"
   "/Users/ajolley/moos-ivp/build/MOOS/MOOSCore/MOOSConfig.cmake"
   "/Users/ajolley/moos-ivp/build/MOOS/MOOSCore/MOOSConfigVersion.cmake"
   "/Users/ajolley/moos-ivp/build/MOOS/MOOSCore/UseMOOS.cmake"
@@ -56,6 +57,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "src/lib_behaviors-test/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/pXRelayTest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/pExampleApp/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/uFldHazardMgrX/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -63,4 +65,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "src/lib_behaviors-test/CMakeFiles/BHV_SimpleWaypoint.dir/DependInfo.cmake"
   "src/pXRelayTest/CMakeFiles/pXRelayTest.dir/DependInfo.cmake"
   "src/pExampleApp/CMakeFiles/pExampleApp.dir/DependInfo.cmake"
+  "src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/DependInfo.cmake"
   )

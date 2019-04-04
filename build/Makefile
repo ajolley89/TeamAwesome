@@ -149,6 +149,19 @@ pExampleApp/fast:
 	$(MAKE) -f src/pExampleApp/CMakeFiles/pExampleApp.dir/build.make src/pExampleApp/CMakeFiles/pExampleApp.dir/build
 .PHONY : pExampleApp/fast
 
+#=============================================================================
+# Target rules for targets named uFldHazardMgrX
+
+# Build rule for target.
+uFldHazardMgrX: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 uFldHazardMgrX
+.PHONY : uFldHazardMgrX
+
+# fast build rule for target.
+uFldHazardMgrX/fast:
+	$(MAKE) -f src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/build.make src/uFldHazardMgrX/CMakeFiles/uFldHazardMgrX.dir/build
+.PHONY : uFldHazardMgrX/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -160,6 +173,7 @@ help:
 	@echo "... BHV_SimpleWaypoint"
 	@echo "... pXRelayTest"
 	@echo "... pExampleApp"
+	@echo "... uFldHazardMgrX"
 .PHONY : help
 
 
