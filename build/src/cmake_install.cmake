@@ -1,4 +1,4 @@
-# Install script for directory: /Users/ajolley/moos-ivp-team_awesome/src
+# Install script for directory: /Users/ajolley/moos-ivp-team-awesome/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,9 +34,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/ajolley/moos-ivp-team_awesome/build/src/lib_behaviors-test/cmake_install.cmake")
-  include("/Users/ajolley/moos-ivp-team_awesome/build/src/pXRelayTest/cmake_install.cmake")
-  include("/Users/ajolley/moos-ivp-team_awesome/build/src/pExampleApp/cmake_install.cmake")
+  include("/Users/ajolley/moos-ivp-team-awesome/build/src/lib_behaviors-test/cmake_install.cmake")
+  include("/Users/ajolley/moos-ivp-team-awesome/build/src/pXRelayTest/cmake_install.cmake")
+  include("/Users/ajolley/moos-ivp-team-awesome/build/src/pExampleApp/cmake_install.cmake")
 
 endif()
 

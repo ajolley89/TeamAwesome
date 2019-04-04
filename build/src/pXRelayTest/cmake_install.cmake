@@ -1,4 +1,4 @@
-# Install script for directory: /Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest
+# Install script for directory: /Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

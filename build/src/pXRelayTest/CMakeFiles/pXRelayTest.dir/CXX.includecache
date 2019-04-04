@@ -6,43 +6,43 @@
 
 #IncludeRegexTransform: 
 
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer.cpp
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer.cpp
 iterator
 -
 Relayer.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer.h
 MBUtils.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/MBUtils.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/MBUtils.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer.h
 MOOS/libMOOS/MOOSLib.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/MOOS/libMOOS/MOOSLib.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/MOOS/libMOOS/MOOSLib.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer_Info.cpp
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer_Info.cpp
 cstdlib
 -
 iostream
 -
 Relayer_Info.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer_Info.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer_Info.h
 ColorParse.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/ColorParse.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/ColorParse.h
 ReleaseInfo.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/ReleaseInfo.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/ReleaseInfo.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer_Info.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer_Info.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/main.cpp
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/main.cpp
 string
 -
 list
 -
 Relayer.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer.h
 Relayer_Info.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/Relayer_Info.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/Relayer_Info.h
 MBUtils.h
-/Users/ajolley/moos-ivp-team_awesome/src/pXRelayTest/MBUtils.h
+/Users/ajolley/moos-ivp-team-awesome/src/pXRelayTest/MBUtils.h
 
 /Users/ajolley/moos-ivp/MOOS/MOOSCore/Core/libMOOS/App/include/MOOS/libMOOS/App/ClientDefines.h
 

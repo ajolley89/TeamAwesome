@@ -6,51 +6,51 @@
 
 #IncludeRegexTransform: 
 
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.cpp
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.cpp
 math.h
 -
 AOF_SimpleWaypoint.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.h
 AngleUtils.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/AngleUtils.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/AngleUtils.h
 GeomUtils.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/GeomUtils.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/GeomUtils.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.h
 AOF.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/AOF.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/AOF.h
 IvPDomain.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/IvPDomain.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/IvPDomain.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/BHV_SimpleWaypoint.cpp
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/BHV_SimpleWaypoint.cpp
 cstdlib
 -
 math.h
 -
 BHV_SimpleWaypoint.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/BHV_SimpleWaypoint.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/BHV_SimpleWaypoint.h
 MBUtils.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/MBUtils.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/MBUtils.h
 AngleUtils.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/AngleUtils.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/AngleUtils.h
 BuildUtils.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/BuildUtils.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/BuildUtils.h
 ZAIC_PEAK.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/ZAIC_PEAK.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/ZAIC_PEAK.h
 OF_Coupler.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/OF_Coupler.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/OF_Coupler.h
 OF_Reflector.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/OF_Reflector.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/OF_Reflector.h
 AOF_SimpleWaypoint.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/AOF_SimpleWaypoint.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/BHV_SimpleWaypoint.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/BHV_SimpleWaypoint.h
 string
 -
 IvPBehavior.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/IvPBehavior.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/IvPBehavior.h
 XYPoint.h
-/Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test/XYPoint.h
+/Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test/XYPoint.h
 
 /Users/ajolley/moos-ivp/ivp/src/lib_behaviors/IvPBehavior.h
 map

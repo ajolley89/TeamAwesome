@@ -1,4 +1,4 @@
-# Install script for directory: /Users/ajolley/moos-ivp-team_awesome
+# Install script for directory: /Users/ajolley/moos-ivp-team-awesome
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/ajolley/moos-ivp-team_awesome/build/src/cmake_install.cmake")
+  include("/Users/ajolley/moos-ivp-team-awesome/build/src/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +46,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/ajolley/moos-ivp-team_awesome/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/ajolley/moos-ivp-team-awesome/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

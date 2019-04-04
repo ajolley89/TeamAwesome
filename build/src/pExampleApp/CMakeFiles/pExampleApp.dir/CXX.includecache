@@ -6,15 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/Users/ajolley/moos-ivp-team_awesome/src/pExampleApp/ExampleApp.h
+/Users/ajolley/moos-ivp-team-awesome/src/pExampleApp/ExampleApp.h
 MOOS/libMOOS/App/MOOSApp.h
-/Users/ajolley/moos-ivp-team_awesome/src/pExampleApp/MOOS/libMOOS/App/MOOSApp.h
+/Users/ajolley/moos-ivp-team-awesome/src/pExampleApp/MOOS/libMOOS/App/MOOSApp.h
 
-/Users/ajolley/moos-ivp-team_awesome/src/pExampleApp/main.cpp
+/Users/ajolley/moos-ivp-team-awesome/src/pExampleApp/main.cpp
 MOOS/libMOOS/App/MOOSApp.h
-/Users/ajolley/moos-ivp-team_awesome/src/pExampleApp/MOOS/libMOOS/App/MOOSApp.h
+/Users/ajolley/moos-ivp-team-awesome/src/pExampleApp/MOOS/libMOOS/App/MOOSApp.h
 ExampleApp.h
-/Users/ajolley/moos-ivp-team_awesome/src/pExampleApp/ExampleApp.h
+/Users/ajolley/moos-ivp-team-awesome/src/pExampleApp/ExampleApp.h
 
 /Users/ajolley/moos-ivp/MOOS/MOOSCore/Core/libMOOS/App/include/MOOS/libMOOS/App/ClientDefines.h
 

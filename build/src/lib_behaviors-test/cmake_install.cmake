@@ -1,4 +1,4 @@
-# Install script for directory: /Users/ajolley/moos-ivp-team_awesome/src/lib_behaviors-test
+# Install script for directory: /Users/ajolley/moos-ivp-team-awesome/src/lib_behaviors-test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
