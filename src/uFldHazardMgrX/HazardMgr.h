@@ -51,11 +51,26 @@ class HazardMgr : public AppCastingMOOSApp
    bool handleMailHazardReport(std::string) {return(true);}
    void handleMailReportRequest();
    void handleMailMissionParams(std::string);
+   void handleMailConcatenateHazards(std::string);
+
+   double m_origin_x;
+   double m_origin_y;
 
  protected: 
    void postSensorConfigRequest();
    void postSensorInfoRequest();
    void postHazardSetReport();
+
+   double m_current_x;
+   double m_current_y;
+   XYHazardSet m_hazard_set;
+   std::string m_hazardset_local;
+   XYPolygon   m_search_region;
+   XYSegList m_waypoints;
+   XYSegList sorted_points;
+   double m_dbl_x;
+   double m_dbl_y;
+
    
  private: // Configuration variables
    double      m_swath_width_desired;
@@ -78,9 +93,7 @@ class HazardMgr : public AppCastingMOOSApp
    double m_swath_width_granted;
    double m_pd_granted;
 
-   XYHazardSet m_hazard_set;
-   std::string m_hazardset_local;
-   XYPolygon   m_search_region;
+   
    
    double      m_transit_path_width;
 };

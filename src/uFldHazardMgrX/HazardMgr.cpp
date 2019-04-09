@@ -1,8 +1,8 @@
 /*****************************************************************/
-/*    NAME: Michael Benjamin                                     */
+/*    NAME: Michael Benjamin // Jason Barker                     */
 /*    ORGN: Dept of Mechanical Eng / CSAIL, MIT Cambridge MA     */
 /*    FILE: HazardMgr.cpp                                        */
-/*    DATE: Oct 26th 2012                                        */
+/*    DATE: Oct 26th 2012   // Apr 04 2019                       */
 /*                                                               */
 /* This file is part of MOOS-IvP                                 */
 /*                                                               */
@@ -26,6 +26,7 @@
 #include "HazardMgr.h"
 #include "XYFormatUtilsHazard.h"
 #include "XYFormatUtilsPoly.h"
+#include "XYFormatUtilsHazardSet.h"
 #include "ACTable.h"
 
 using namespace std;
@@ -81,17 +82,61 @@ bool HazardMgr::OnNewMail(MOOSMSG_LIST &NewMail)
     else if(key == "UHZ_OPTIONS_SUMMARY") 
       handleMailSensorOptionsSummary(sval);
 
-    else if(key == "UHZ_DETECTION_REPORT") 
+    else if(key == "UHZ_DETECTION_REPORT"){ 
       handleMailDetectionReport(sval);
+      m_waypoints.add_vertex(m_dbl_x, m_dbl_y);
+    }
 
     else if(key == "HAZARDSET_REQUEST") 
       handleMailReportRequest();
+ 
+    else if(key == "HAZARDSET_REPORT")
+      handleMailConcatenateHazards(sval);
+
 
     else if(key == "UHZ_MISSION_PARAMS") 
       handleMailMissionParams(sval);
 
-    else 
-      reportRunWarning("Unhandled Mail: " + key);
+    else if(key == "NAV_X"){
+        m_current_x = msg.GetDouble();
+      }
+    else if(key == "NAV_Y"){
+        m_current_y = msg.GetDouble();
+      }
+
+    else if(key == "GENPATH_REGENERATE"){
+      m_waypoints.add_vertex(m_current_x, m_current_y);
+      XYSegList sorted_waypoints;
+      XYSegList working_waypoints = m_waypoints;
+      int closest_index = working_waypoints.closest_vertex(m_current_x, m_current_y); 
+      double next_x = working_waypoints.get_vx(closest_index);
+      double next_y = working_waypoints.get_vy(closest_index);
+      working_waypoints.delete_vertex(closest_index);
+      sorted_waypoints.add_vertex(next_x, next_y); 
+      for(int i=1; i<m_waypoints.size(); i++){
+      int closest_index = working_waypoints.closest_vertex(next_x, next_y);
+       next_x = working_waypoints.get_vx(closest_index);
+      next_y = working_waypoints.get_vy(closest_index);
+      sorted_waypoints.add_vertex(next_x, next_y);
+      working_waypoints.delete_vertex(closest_index);  
+    }
+    string color;
+      if(next_x > 88){
+      color = "red";
+      }
+      else{
+      color = "yellow";
+    }
+      string update_str = "points = ";
+      update_str += sorted_waypoints.get_spec();
+      update_str += " # visual_hints = edge_color = " + color + ", vertex_color = " + color;
+    
+
+      Notify("WAYPOINT_UPDATE_" + m_report_name, update_str); 
+    }
+
+    //else 
+      //reportRunWarning("Unhandled Mail: " + key);
   }
 	
    return(true);
@@ -123,6 +168,8 @@ bool HazardMgr::Iterate()
   m_hazardset_local = m_hazard_set.getSpec();
   string node_message = "src_node=" + m_report_name + ",dest_node=all,var_name=HAZARDSET_" + toupper(m_report_name) +",string_val=" + m_hazardset_local;
   Notify("NODE_MESSAGE_LOCAL", node_message);
+
+
 
   AppCastingMOOSApp::PostReport();
   return(true);
@@ -166,11 +213,13 @@ bool HazardMgr::OnStartUp()
       value = stripQuotes(value);
       m_other_vehicle = value;
       handled = true;
-    }    
+    }
+
+
     else if(param == "region") {
       XYPolygon poly = string2Poly(value);
       if(poly.is_convex())
-	m_search_region = poly;
+	     m_search_region = poly;
       handled = true;
     }
 
@@ -199,6 +248,10 @@ void HazardMgr::registerVariables()
   Register("HAZARDSET_REQUEST", 0);
   Register("NODE_MESSAGE",0);
   Register("NODE_MESSAGE_LOCAL",0);
+  Register("HAZARDSET_REPORT",0);
+  Register("GENPATH_REGENERATE", 0);
+  Register("NAV_X", 0);
+  Register("NAV_Y", 0);
 }
 
 //---------------------------------------------------------
@@ -306,6 +359,11 @@ bool HazardMgr::handleMailDetectionReport(string str)
   string event = "New Detection, label=" + new_hazard.getLabel();
   event += ", x=" + doubleToString(new_hazard.getX(),1);
   event += ", y=" + doubleToString(new_hazard.getY(),1);
+  
+  m_dbl_x = new_hazard.getX();
+  m_dbl_y = new_hazard.getY();
+
+
 
   reportEvent(event);
 
@@ -353,6 +411,16 @@ void HazardMgr::handleMailMissionParams(string str)
     // This needs to be handled by the developer. Just a placeholder.
   }
 }
+//------------------------------------------------------------
+// Procedure: handleMailConcatenateHazards
+void HazardMgr::handleMailConcatenateHazards(string str)
+{
+  XYHazardSet m_hazard_incoming = string2HazardSet(str);
+  for(unsigned int i=0; i<m_hazard_incoming.getHazardCnt(); i++) {
+    XYHazard my_hazard = m_hazard_incoming.getHazard(i);
+    if(!m_hazard_set.hasHazard(my_hazard.getLabel())) {m_hazard_set.addHazard(my_hazard);}
+  }
+}
 
 
 //------------------------------------------------------------
@@ -360,7 +428,6 @@ void HazardMgr::handleMailMissionParams(string str)
 
 bool HazardMgr::buildReport() 
 {
-  m_msgs << "Own Name: " << m_report_name << ", Other Vehicle Name: " << m_other_vehicle << endl <<endl;
   m_msgs << "Config Requested:"                                  << endl;
   m_msgs << "    swath_width_desired: " << m_swath_width_desired << endl;
   m_msgs << "             pd_desired: " << m_pd_desired          << endl;
@@ -379,8 +446,6 @@ bool HazardMgr::buildReport()
   m_msgs << "   Hazardset Reports Requested: " << m_summary_reports << endl;
   m_msgs << "      Hazardset Reports Posted: " << m_summary_reports << endl;
   m_msgs << "                   Report Name: " << m_report_name << endl;
-  m_msgs << m_hazardset_local << endl;
-
 
   return(true);
 }
