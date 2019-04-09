@@ -28,6 +28,7 @@
 #include "XYFormatUtilsPoly.h"
 #include "XYFormatUtilsHazardSet.h"
 #include "ACTable.h"
+#include "NodeMessage.h"
 
 using namespace std;
 
@@ -165,10 +166,15 @@ bool HazardMgr::Iterate()
   if(m_sensor_config_set)
     postSensorInfoRequest();
 
+  NodeMessage node_message;
+  node_message.setSourceNode(m_report_name);
+  node_message.setDestNode("all");
+  node_message.setVarName("HAZARDSET_" + toupper(m_report_name));
   m_hazardset_local = m_hazard_set.getSpec();
-  string node_message = "src_node=" + m_report_name + ",dest_node=all,var_name=HAZARDSET_" + toupper(m_report_name) +",string_val=" + m_hazardset_local;
-  Notify("NODE_MESSAGE_LOCAL", node_message);
+  node_message.setStringVal(m_hazardset_local);
 
+  string msg = node_message.getSpec();
+  Notify("NODE_MESSAGE_LOCAL", msg);
 
 
   AppCastingMOOSApp::PostReport();
