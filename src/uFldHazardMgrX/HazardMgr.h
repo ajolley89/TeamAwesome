@@ -64,12 +64,15 @@ class HazardMgr : public AppCastingMOOSApp
    double m_current_x;
    double m_current_y;
    XYHazardSet m_hazard_set;
+   XYHazardSet m_hazard_queue;
    std::string m_hazardset_local;
    XYPolygon   m_search_region;
    XYSegList m_waypoints;
    XYSegList sorted_points;
    double m_dbl_x;
    double m_dbl_y;
+   double m_timer;
+   double m_sent_timer;
 
    
  private: // Configuration variables

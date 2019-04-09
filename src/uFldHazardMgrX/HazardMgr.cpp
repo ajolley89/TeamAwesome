@@ -53,6 +53,7 @@ HazardMgr::HazardMgr()
   m_detection_reports  = 0;
 
   m_summary_reports = 0;
+  m_sent_timer = MOOSTime();
 }
 
 //---------------------------------------------------------
@@ -103,6 +104,10 @@ bool HazardMgr::OnNewMail(MOOSMSG_LIST &NewMail)
     else if(key == "NAV_Y"){
         m_current_y = msg.GetDouble();
       }
+    
+    else if(key == "NODE_REPORT"){
+      m_timer = MOOSTime();
+    }
 
     else if(key == "GENPATH_REGENERATE"){
       m_waypoints.add_vertex(m_current_x, m_current_y);
@@ -167,16 +172,18 @@ bool HazardMgr::Iterate()
   if(m_sensor_config_set)
     postSensorInfoRequest();
 
-  NodeMessage node_message;
-  node_message.setSourceNode(m_report_name);
-  node_message.setDestNode("all");
-  node_message.setVarName("HAZARDSET_OTHER");
-  m_hazardset_local = m_hazard_set.getSpec();
-  node_message.setStringVal(m_hazardset_local);
-
-  string msg = node_message.getSpec();
-  Notify("NODE_MESSAGE_LOCAL", msg);
-
+  if(MOOSTime() - m_timer < 30 && MOOSTime() - m_sent_timer > 60){
+     NodeMessage node_message;
+     node_message.setSourceNode(m_report_name);
+     node_message.setDestNode("all");
+     node_message.setVarName("HAZARDSET_OTHER");
+     m_hazardset_local = m_hazard_queue.getSpec();
+     node_message.setStringVal(m_hazardset_local);
+     string msg = node_message.getSpec();
+     Notify("NODE_MESSAGE_LOCAL", msg);
+     m_hazard_queue.clear();
+     m_sent_timer = MOOSTime();
+  }
 
   AppCastingMOOSApp::PostReport();
   return(true);
@@ -218,7 +225,7 @@ bool HazardMgr::OnStartUp()
     }
     else if(param == "other_vehicle") {
       value = stripQuotes(value);
-      m_other_vehicle = value;
+      m_other_vehicle = toupper(value);
       handled = true;
     }
 
@@ -260,6 +267,7 @@ void HazardMgr::registerVariables()
   Register("NAV_X", 0);
   Register("NAV_Y", 0);
   Register("HAZARDSET_OTHER");
+  Register("NODE_REPORT");
 }
 
 //---------------------------------------------------------
@@ -349,6 +357,11 @@ void HazardMgr::handleMailConcatenateHazards(string str)
     if(!m_hazard_set.hasHazard(my_hazard.getLabel())) {
       m_hazard_set.addHazard(my_hazard);
       m_waypoints.insert_vertex(my_hazard.getX(), my_hazard.getY());
+
+       string event = "Remote Detection, label=" + my_hazard.getLabel();
+       event += ", x=" + doubleToString(my_hazard.getX(),1);
+        event += ", y=" + doubleToString(my_hazard.getY(),1);
+        reportEvent(event);
       }
 
   }
@@ -374,8 +387,9 @@ bool HazardMgr::handleMailDetectionReport(string str)
   }
 
   int ix = m_hazard_set.findHazard(hazlabel);
-  if(ix == -1)
+  if(ix == -1){
     m_hazard_set.addHazard(new_hazard);
+    m_hazard_queue.addHazard(new_hazard);}
   else
     m_hazard_set.setHazard(ix, new_hazard);
 
@@ -385,8 +399,6 @@ bool HazardMgr::handleMailDetectionReport(string str)
   
   m_dbl_x = new_hazard.getX();
   m_dbl_y = new_hazard.getY();
-
-
 
   reportEvent(event);
 
