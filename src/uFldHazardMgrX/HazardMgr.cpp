@@ -172,7 +172,7 @@ bool HazardMgr::Iterate()
   if(m_sensor_config_set)
     postSensorInfoRequest();
 
-  if(MOOSTime() - m_timer < 30 && MOOSTime() - m_sent_timer > 60){
+  if(MOOSTime() - m_timer < 5 && MOOSTime() - m_sent_timer > 61){
      NodeMessage node_message;
      node_message.setSourceNode(m_report_name);
      node_message.setDestNode("all");
