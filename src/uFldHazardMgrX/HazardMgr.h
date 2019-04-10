@@ -26,6 +26,7 @@
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "XYHazardSet.h"
+#include "XYHazard.h"          // KJ KJ KJ KJ KJ KJ KJ KJ KJ 
 #include "XYPolygon.h"
 
 class HazardMgr : public AppCastingMOOSApp
@@ -48,9 +49,9 @@ class HazardMgr : public AppCastingMOOSApp
    bool handleMailSensorConfigAck(std::string);
    bool handleMailSensorOptionsSummary(std::string) {return(true);}
    bool handleMailDetectionReport(std::string);
-   bool handleMailHazardReport(std::string) {return(true);}
+   bool handleMailHazardReport(std::string); // KJ KJ KJ KJ KJ KJ KJ KJ KJ
    void handleMailReportRequest();
-   void handleMailMissionParams(std::string);
+   void handleMailMissionParams(std::string); 
    void handleMailConcatenateHazards(std::string);
 
    double m_origin_x;
@@ -74,6 +75,7 @@ class HazardMgr : public AppCastingMOOSApp
    double m_timer;
    double m_sent_timer;
 
+
    
  private: // Configuration variables
    double      m_swath_width_desired;
@@ -96,9 +98,10 @@ class HazardMgr : public AppCastingMOOSApp
    double m_swath_width_granted;
    double m_pd_granted;
 
-   
-   
    double      m_transit_path_width;
+
+   unsigned int m_penalty_mh, m_penalty_fa;   // KJ KJ KJ KJ KJ KJ KJ KJ KJ 
+   unsigned int m_max_time;  // KJ KJ KJ KJ KJ KJ KJ KJ 
 };
 
 #endif 

@@ -108,6 +108,10 @@ bool HazardMgr::OnNewMail(MOOSMSG_LIST &NewMail)
     else if(key == "NODE_REPORT"){
       m_timer = MOOSTime();
     }
+    
+    else if(key == "UHZ_HAZARD_REPORT") {  // KJ KJ KJ KJ KJ KJ KJ 
+       handleMailHazardReport(sval);
+    }
 
     else if(key == "GENPATH_REGENERATE"){
       m_waypoints.add_vertex(m_current_x, m_current_y);
@@ -185,7 +189,15 @@ bool HazardMgr::Iterate()
      m_hazard_queue.clear();
      m_sent_timer = MOOSTime();
   }
-
+  XYHazardSet scrubbing_hazardset;
+  for(int haznum = 0; haznum < m_hazard_set.size(); haznum ++) {
+    XYHazard hazard_fun = m_hazard_set.getHazard(haznum);
+    if(hazard_fun.getType() == "hazard"){
+      scrubbing_hazardset.addHazard(hazard_fun);
+    }
+  }
+  m_hazard_set = scrubbing_hazardset;
+  m_hazard_set.setSource(m_report_name);
   AppCastingMOOSApp::PostReport();
   return(true);
 }
@@ -257,6 +269,7 @@ void HazardMgr::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
   Register("UHZ_DETECTION_REPORT", 0);
+  Register("UHZ_HAZARD_REPORT", 0); // KJ KJ KJ KJ KJ KJ KJ
   Register("UHZ_CONFIG_ACK", 0);
   Register("UHZ_OPTIONS_SUMMARY", 0);
   Register("UHZ_MISSION_PARAMS", 0);
@@ -277,7 +290,22 @@ void HazardMgr::registerVariables()
 void HazardMgr::postSensorConfigRequest()
 {
   string request = "vname=" + m_host_community;
-  
+
+ /* if(m_report_name=="jake")
+    {
+      // default: exp=2 and width=50 and Pd=60
+      double penalty_ratio = m_penalty_mh / m_penalty_fa;
+      if(penalty_ratio > 3) {
+	m_swath_width_desired=50;
+	m_pd_desired=0.7;
+	//go after both the hazards and the benigns because pFA =1 and 50/50 chance
+      }
+      else if(penalty_ratio < 3) {
+	m_swath_width_desired=25;
+	m_pd_desired=0.7;
+	//go after the hazards only, not the benigns because Jake's sensor is pretty good at pFA = 0.3
+      }
+    }*/
   request += ",width=" + doubleToStringX(m_swath_width_desired,2);
   request += ",pd="    + doubleToStringX(m_pd_desired,2);
 
@@ -378,6 +406,7 @@ bool HazardMgr::handleMailDetectionReport(string str)
   m_detection_reports++;
 
   XYHazard new_hazard = string2Hazard(str);
+  new_hazard.setSource(m_report_name);  // KJ KJ KJ KJ KJ KJ KJ KJ KJ
   new_hazard.setType("hazard");
 
   string hazlabel = new_hazard.getLabel();
@@ -391,8 +420,13 @@ bool HazardMgr::handleMailDetectionReport(string str)
   if(ix == -1){
     m_hazard_set.addHazard(new_hazard);
     m_hazard_queue.addHazard(new_hazard);}
-  else
-    m_hazard_set.setHazard(ix, new_hazard);
+  else {     // KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ 
+    XYHazard compareHazard = m_hazard_set.getHazard(ix);
+    if((m_report_name=="jake") || (compareHazard.gxetSource()=="jake"))
+      { //if I'm Jake, then overwrite. If what I have is from Jake, then overwrite. 
+	m_hazard_set.setHazard(ix, new_hazard);  // KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ 
+      }
+  }
 
   string event = "New Detection, label=" + new_hazard.getLabel();
   event += ", x=" + doubleToString(new_hazard.getX(),1);
@@ -404,9 +438,7 @@ bool HazardMgr::handleMailDetectionReport(string str)
   reportEvent(event);
 
   string req = "vname=" + m_host_community + ",label=" + hazlabel;
-
   Notify("UHZ_CLASSIFY_REQUEST", req);
-
   return(true);
 }
 
@@ -420,7 +452,7 @@ void HazardMgr::handleMailReportRequest()
 
   m_hazard_set.findMinXPath(20);
   //unsigned int count    = m_hazard_set.findMinXPath(20);
-  string summary_report = m_hazard_set.getSpec("final_report");
+  string summary_report = m_hazard_set.getSpec();
   
   Notify("HAZARDSET_REPORT", summary_report);
 }
@@ -437,18 +469,19 @@ void HazardMgr::handleMailReportRequest()
 //                       search_region = pts={-150,-75:-150,-50:40,-50:40,-75}
 
 
-void HazardMgr::handleMailMissionParams(string str)
+void HazardMgr::handleMailMissionParams(string str) //  KJ KJ KJ KJ KJ KJ KJ 
 {
   vector<string> svector = parseStringZ(str, ',', "{");
   unsigned int i, vsize = svector.size();
   for(i=0; i<vsize; i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
-    // This needs to be handled by the developer. Just a placeholder.
+    if(param=="penalty_false_alarm") {m_penalty_fa = stoi(value);}
+    else if(param=="penalty_missed_hazard") {m_penalty_mh = stoi(value);}
+    else if(param=="max_time") {m_max_time = stoi(value);}
   }
+  return;
 }
-
-
 
 //------------------------------------------------------------
 // Procedure: buildReport()
@@ -476,6 +509,33 @@ bool HazardMgr::buildReport()
 
   return(true);
 }
+
+bool HazardMgr::handleMailHazardReport(string str) //  KJ KJ KJ KJ KJ KJ KJ 
+{
+  XYHazard classifiedHazard = string2Hazard(str);
+  int index = -1;
+  
+  index = m_hazard_set.findHazard(classifiedHazard.getLabel());
+  if(index==-1) { // if !exist in m_hazard_set, add hazard as Jake-sourced since unknown source
+    classifiedHazard.setSource("jake");
+    m_hazard_set.addHazard(classifiedHazard);
+  }
+  else // it does already exist in the m_hazard_set
+    {
+      XYHazard currentHazard=m_hazard_set.getHazard(index);
+      string tp=currentHazard.getType();
+      if((tp!="hazard" && tp!="benign") || (currentHazard.gxetSource()=="jake")) {
+	//if the type is currently empty or the source is currently jake
+	currentHazard.setType(classifiedHazard.getType()); // set type
+	m_hazard_set.setHazard(index, currentHazard); // overwrite that hazard to m_hazard_set
+      }
+      //we assume any classification done once by kasper is final, so no need to overwrite
+      //...kasper on kasper
+    }
+  return true;
+}
+
+
 
 
 
