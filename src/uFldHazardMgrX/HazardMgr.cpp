@@ -177,6 +177,7 @@ bool HazardMgr::Iterate()
      node_message.setSourceNode(m_report_name);
      node_message.setDestNode("all");
      node_message.setVarName("HAZARDSET_OTHER");
+     m_hazard_queue.setSource(m_report_name);
      m_hazardset_local = m_hazard_queue.getSpec();
      node_message.setStringVal(m_hazardset_local);
      string msg = node_message.getSpec();
