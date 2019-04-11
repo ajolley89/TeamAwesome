@@ -108,13 +108,14 @@ bool HazardMgr::OnNewMail(MOOSMSG_LIST &NewMail)
     else if(key == "NODE_REPORT"){
       m_timer = MOOSTime();
     }
-    
+
     else if(key == "UHZ_HAZARD_REPORT") {  // KJ KJ KJ KJ KJ KJ KJ 
+       reportEvent("UHZ_HAZARD_REPORT Recieved");
        handleMailHazardReport(sval);
     }
 
     else if(key == "GENPATH_REGENERATE"){
-      m_waypoints.add_vertex(m_current_x, m_current_y);
+      //m_waypoints.add_vertex(m_current_x, m_current_y);
       XYSegList sorted_waypoints;
       XYSegList working_waypoints = m_waypoints;
       int closest_index = working_waypoints.closest_vertex(m_current_x, m_current_y); 
@@ -137,7 +138,7 @@ bool HazardMgr::OnNewMail(MOOSMSG_LIST &NewMail)
         color = "yellow";
      }
         string update_str = "points = ";
-        update_str += sorted_waypoints.get_spec();
+        update_str += m_waypoints.get_spec();
         update_str += " # visual_hints = edge_color = " + color + ", vertex_color = " + color;
         Notify("WAYPOINT_UPDATE_" + m_report_name, update_str); 
     }
@@ -149,7 +150,7 @@ bool HazardMgr::OnNewMail(MOOSMSG_LIST &NewMail)
     else {reportRunWarning("Unhandled Mail: " + key);};
 
   }
-	
+  
    return(true);
 }
 
@@ -176,7 +177,9 @@ bool HazardMgr::Iterate()
   if(m_sensor_config_set)
     postSensorInfoRequest();
 
-  if(MOOSTime() - m_timer < 5 && MOOSTime() - m_sent_timer > 61){
+
+
+  //if(MOOSTime() - m_timer < 5 && MOOSTime() - m_sent_timer > 61){
      NodeMessage node_message;
      node_message.setSourceNode(m_report_name);
      node_message.setDestNode("all");
@@ -188,8 +191,9 @@ bool HazardMgr::Iterate()
      Notify("NODE_MESSAGE_LOCAL", msg);
      m_hazard_queue.clear();
      m_sent_timer = MOOSTime();
-  }
-  XYHazardSet scrubbing_hazardset;
+  //}
+  
+    XYHazardSet scrubbing_hazardset;
   for(int haznum = 0; haznum < m_hazard_set.size(); haznum ++) {
     XYHazard hazard_fun = m_hazard_set.getHazard(haznum);
     if(hazard_fun.getType() == "hazard"){
@@ -198,6 +202,14 @@ bool HazardMgr::Iterate()
   }
   m_hazard_set = scrubbing_hazardset;
   m_hazard_set.setSource(m_report_name);
+
+    int closest_waypoint = m_waypoints.closest_vertex(m_current_x, m_current_y); //find the vertext closest to the current position
+    double closest_x = m_waypoints.get_vx(closest_waypoint);
+    double closest_y = m_waypoints.get_vy(closest_waypoint);
+    double distance = sqrt(pow((closest_x-m_current_x),2)+pow((closest_y-m_current_y),2));
+    if(distance < 10){
+      m_waypoints.delete_vertex(closest_waypoint);}
+
   AppCastingMOOSApp::PostReport();
   return(true);
 }
@@ -246,7 +258,7 @@ bool HazardMgr::OnStartUp()
     else if(param == "region") {
       XYPolygon poly = string2Poly(value);
       if(poly.is_convex())
-	     m_search_region = poly;
+       m_search_region = poly;
       handled = true;
     }
 
@@ -258,7 +270,7 @@ bool HazardMgr::OnStartUp()
   m_hazard_set.setName(m_report_name);
   m_hazard_set.setRegion(m_search_region);
   
-  registerVariables();	
+  registerVariables();  
   return(true);
 }
 
@@ -291,21 +303,21 @@ void HazardMgr::postSensorConfigRequest()
 {
   string request = "vname=" + m_host_community;
 
- /* if(m_report_name=="jake")
-    {
-      // default: exp=2 and width=50 and Pd=60
-      double penalty_ratio = m_penalty_mh / m_penalty_fa;
-      if(penalty_ratio > 3) {
-	m_swath_width_desired=50;
-	m_pd_desired=0.7;
-	//go after both the hazards and the benigns because pFA =1 and 50/50 chance
-      }
-      else if(penalty_ratio < 3) {
-	m_swath_width_desired=25;
-	m_pd_desired=0.7;
-	//go after the hazards only, not the benigns because Jake's sensor is pretty good at pFA = 0.3
-      }
-    }*/
+  //  if(m_report_name=="jake")
+  //   {
+  //     // default: exp=2 and width=50 and Pd=60
+  //     double penalty_ratio = m_penalty_mh / m_penalty_fa;
+  //     if(penalty_ratio > 3) {
+  //     m_swath_width_desired=50;
+  //     m_pd_desired=0.7;
+  // //go after both the hazards and the benigns because pFA =1 and 50/50 chance
+  //     }
+  //     else if(penalty_ratio < 3) {
+  // m_swath_width_desired=25;
+  // m_pd_desired=0.7;
+  // //go after the hazards only, not the benigns because Jake's sensor is pretty good at pFA = 0.3
+  //     }
+  //   } 
   request += ",width=" + doubleToStringX(m_swath_width_desired,2);
   request += ",pd="    + doubleToStringX(m_pd_desired,2);
 
@@ -385,12 +397,17 @@ void HazardMgr::handleMailConcatenateHazards(string str)
     XYHazard my_hazard = m_hazard_incoming.getHazard(i);
     if(!m_hazard_set.hasHazard(my_hazard.getLabel())) {
       m_hazard_set.addHazard(my_hazard);
-      m_waypoints.insert_vertex(my_hazard.getX(), my_hazard.getY());
+      m_waypoints.add_vertex(my_hazard.getX(), my_hazard.getY());
 
        string event = "Remote Detection, label=" + my_hazard.getLabel();
        event += ", x=" + doubleToString(my_hazard.getX(),1);
         event += ", y=" + doubleToString(my_hazard.getY(),1);
         reportEvent(event);
+if(m_report_name == "kasper") Notify("GENPATH_REGENERATE", "true");
+
+//        string req = "vname=" + m_host_community + ",label=" + my_hazard.getLabel();
+//        Notify("UHZ_CLASSIFY_REQUEST", req);
+
       }
 
   }
@@ -406,7 +423,6 @@ bool HazardMgr::handleMailDetectionReport(string str)
   m_detection_reports++;
 
   XYHazard new_hazard = string2Hazard(str);
-  new_hazard.setSource(m_report_name);  // KJ KJ KJ KJ KJ KJ KJ KJ KJ
   new_hazard.setType("hazard");
 
   string hazlabel = new_hazard.getLabel();
@@ -420,13 +436,13 @@ bool HazardMgr::handleMailDetectionReport(string str)
   if(ix == -1){
     m_hazard_set.addHazard(new_hazard);
     m_hazard_queue.addHazard(new_hazard);}
-  else {     // KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ 
-    XYHazard compareHazard = m_hazard_set.getHazard(ix);
-    if((m_report_name=="jake") || (compareHazard.gxetSource()=="jake"))
-      { //if I'm Jake, then overwrite. If what I have is from Jake, then overwrite. 
-	m_hazard_set.setHazard(ix, new_hazard);  // KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ 
-      }
-  }
+  // else {     // KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ 
+  // //  XYHazard compareHazard = m_hazard_set.getHazard(ix);
+  // //  if((m_report_name=="jake") || (compareHazard.gxetSource()=="jake"))
+  // //    { //if I'm Jake, then overwrite. If what I have is from Jake, then overwrite. 
+  // //m_hazard_set.setHazard(ix, new_hazard);  // KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ KJ 
+  //   //  }
+  // }
 
   string event = "New Detection, label=" + new_hazard.getLabel();
   event += ", x=" + doubleToString(new_hazard.getX(),1);
@@ -438,7 +454,10 @@ bool HazardMgr::handleMailDetectionReport(string str)
   reportEvent(event);
 
   string req = "vname=" + m_host_community + ",label=" + hazlabel;
+if(m_report_name == "kasper") {
   Notify("UHZ_CLASSIFY_REQUEST", req);
+  reportEvent("UHZ_CLASSIFY_REQUEST Sent");
+}
   return(true);
 }
 
@@ -452,7 +471,9 @@ void HazardMgr::handleMailReportRequest()
 
   m_hazard_set.findMinXPath(20);
   //unsigned int count    = m_hazard_set.findMinXPath(20);
-  string summary_report = m_hazard_set.getSpec();
+  m_update_hazard_set.findMinXPath(20);
+  m_update_hazard_set.setSource(m_report_name);
+  string summary_report = m_update_hazard_set.getSpec();
   
   Notify("HAZARDSET_REPORT", summary_report);
 }
@@ -469,7 +490,7 @@ void HazardMgr::handleMailReportRequest()
 //                       search_region = pts={-150,-75:-150,-50:40,-50:40,-75}
 
 
-void HazardMgr::handleMailMissionParams(string str) //  KJ KJ KJ KJ KJ KJ KJ 
+void HazardMgr::handleMailMissionParams(string str)
 {
   vector<string> svector = parseStringZ(str, ',', "{");
   unsigned int i, vsize = svector.size();
@@ -479,9 +500,12 @@ void HazardMgr::handleMailMissionParams(string str) //  KJ KJ KJ KJ KJ KJ KJ
     if(param=="penalty_false_alarm") {m_penalty_fa = stoi(value);}
     else if(param=="penalty_missed_hazard") {m_penalty_mh = stoi(value);}
     else if(param=="max_time") {m_max_time = stoi(value);}
+    // This needs to be handled by the developer. Just a placeholder.
   }
   return;
 }
+
+
 
 //------------------------------------------------------------
 // Procedure: buildReport()
@@ -509,12 +533,14 @@ bool HazardMgr::buildReport()
 
   return(true);
 }
-
+//------------------------------------------------------------
 bool HazardMgr::handleMailHazardReport(string str) //  KJ KJ KJ KJ KJ KJ KJ 
 {
   XYHazard classifiedHazard = string2Hazard(str);
+  classifiedHazard.setSource(m_report_name);
   int index = -1;
-  
+  if(classifiedHazard.getType()=="hazard") m_update_hazard_set.addHazard(classifiedHazard);
+
   index = m_hazard_set.findHazard(classifiedHazard.getLabel());
   if(index==-1) { // if !exist in m_hazard_set, add hazard as Jake-sourced since unknown source
     classifiedHazard.setSource("jake");
@@ -524,27 +550,17 @@ bool HazardMgr::handleMailHazardReport(string str) //  KJ KJ KJ KJ KJ KJ KJ
     {
       XYHazard currentHazard=m_hazard_set.getHazard(index);
       string tp=currentHazard.getType();
-      if((tp!="hazard" && tp!="benign") || (currentHazard.gxetSource()=="jake")) {
-	//if the type is currently empty or the source is currently jake
-	currentHazard.setType(classifiedHazard.getType()); // set type
-	m_hazard_set.setHazard(index, currentHazard); // overwrite that hazard to m_hazard_set
+      if((tp=="benign")) {
+  //if the type is currently empty or the source is currently jake
+  currentHazard.setType(classifiedHazard.getType()); // set type
+  m_hazard_set.setHazard(index, currentHazard); // overwrite that hazard to m_hazard_set
+  reportEvent("Benign detection");
       }
+    }
       //we assume any classification done once by kasper is final, so no need to overwrite
       //...kasper on kasper
-    }
+  
   return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 

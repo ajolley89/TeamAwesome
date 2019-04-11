@@ -26,7 +26,7 @@
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "XYHazardSet.h"
-#include "XYHazard.h"          // KJ KJ KJ KJ KJ KJ KJ KJ KJ 
+#include "XYHazard.h" 
 #include "XYPolygon.h"
 
 class HazardMgr : public AppCastingMOOSApp
@@ -49,10 +49,11 @@ class HazardMgr : public AppCastingMOOSApp
    bool handleMailSensorConfigAck(std::string);
    bool handleMailSensorOptionsSummary(std::string) {return(true);}
    bool handleMailDetectionReport(std::string);
-   bool handleMailHazardReport(std::string); // KJ KJ KJ KJ KJ KJ KJ KJ KJ
+ 
    void handleMailReportRequest();
-   void handleMailMissionParams(std::string); 
+   void handleMailMissionParams(std::string);
    void handleMailConcatenateHazards(std::string);
+   bool handleMailHazardReport(std::string);
 
    double m_origin_x;
    double m_origin_y;
@@ -66,6 +67,7 @@ class HazardMgr : public AppCastingMOOSApp
    double m_current_y;
    XYHazardSet m_hazard_set;
    XYHazardSet m_hazard_queue;
+   XYHazardSet m_update_hazard_set;
    std::string m_hazardset_local;
    XYPolygon   m_search_region;
    XYSegList m_waypoints;
@@ -74,7 +76,6 @@ class HazardMgr : public AppCastingMOOSApp
    double m_dbl_y;
    double m_timer;
    double m_sent_timer;
-
 
    
  private: // Configuration variables
@@ -98,14 +99,17 @@ class HazardMgr : public AppCastingMOOSApp
    double m_swath_width_granted;
    double m_pd_granted;
 
+   
+   
    double      m_transit_path_width;
 
    unsigned int m_penalty_mh, m_penalty_fa;   // KJ KJ KJ KJ KJ KJ KJ KJ KJ 
-   unsigned int m_max_time;  // KJ KJ KJ KJ KJ KJ KJ KJ 
+   unsigned int m_max_time;  // KJ KJ KJ KJ KJ KJ KJ KJ
+
+
 };
 
 #endif 
-
 
 
 
